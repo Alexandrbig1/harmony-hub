@@ -300,7 +300,172 @@
 
 // export default Playlist;
 
-import { useState } from "react";
+// import { useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useAuth } from "@/hooks";
+// import questionsData from "@/data/questions.json";
+// import { toast } from "react-toastify";
+// import { commonToastOptions } from "../../helpers/toastOptions";
+// import { generateRingtone } from "../../redux/ringtone/operations";
+// import {
+// 	selectIsGenerating,
+// 	selectGeneratedUrl,
+// 	//   selectRingtoneError
+// } from "../../redux/ringtone/selectors";
+// import {
+// 	MusicHubWrapper,
+// 	QuestionWrapper,
+// 	StepCounter,
+// 	QuestionText,
+// 	AnswerInput,
+// 	NextButton,
+// 	MusicFormWrapper,
+// 	MusicTextWrapper,
+// 	MusicTitle,
+// 	RedirectButton,
+// 	ResetButton,
+// 	ButtonWrapper,
+// 	MusicHubEffectBg,
+// } from "./MusicHub.styled";
+
+// function Playlist() {
+// 	const dispatch = useDispatch();
+// 	const { user, isLoggedIn } = useAuth();
+// 	const [currentQuestion, setCurrentQuestion] = useState(0);
+// 	const [answers, setAnswers] = useState([]);
+
+// 	const isGenerating = useSelector(selectIsGenerating);
+// 	const generatedUrl = useSelector(selectGeneratedUrl);
+// 	//   const error = useSelector(selectRingtoneError);
+
+// 	const handleAnswerChange = (e) => {
+// 		const newAnswers = [...answers];
+// 		newAnswers[currentQuestion] = e.target.value;
+// 		setAnswers(newAnswers);
+// 	};
+
+// 	const handleNextQuestion = async () => {
+// 		if (isGenerating) return;
+
+// 		if (currentQuestion < questionsData.length - 1) {
+// 			setCurrentQuestion(currentQuestion + 1);
+// 			return;
+// 		}
+
+// 		if (!isLoggedIn) {
+// 			toast.error(
+// 				"Please sign in to generate a ringtone",
+// 				commonToastOptions
+// 			);
+// 			return;
+// 		}
+
+// 		const ringtoneData = {
+// 			caller: answers[0],
+// 			instrument: answers[1],
+// 			genre: answers[2],
+// 			popStar: answers[3],
+// 			vibe: answers[4],
+// 		};
+
+// 		console.log("Generating ringtone with data:", ringtoneData);
+
+// 		toast.info(
+// 			"Processing your ringtone, please wait...",
+// 			commonToastOptions
+// 		);
+
+// 		const result = await dispatch(generateRingtone(ringtoneData));
+// 		console.log("Generation result:", result);
+
+// 		if (result.error) {
+// 			console.error("Generation failed:", result.error);
+// 			return;
+// 		}
+
+// 		toast.success(
+// 			"Your ringtone is ready to download!",
+// 			commonToastOptions
+// 		);
+// 	};
+
+// 	const handleDownload = async () => {
+// 		if (!generatedUrl) return;
+
+// 		try {
+// 			// Create a hidden anchor element
+// 			const link = document.createElement("a");
+// 			link.href = generatedUrl;
+// 			link.download = `ringtone-${Date.now()}.mp3`; // Default filename
+// 			document.body.appendChild(link);
+// 			link.click();
+// 			document.body.removeChild(link);
+// 		} catch (error) {
+// 			console.error("Download error:", error);
+// 			toast.error("Failed to download ringtone", commonToastOptions);
+// 		}
+// 	};
+
+// 	const handleReset = () => {
+// 		setCurrentQuestion(0);
+// 		setAnswers([]);
+// 	};
+
+// 	const { question, example } = questionsData[currentQuestion];
+
+// 	return (
+// 		<MusicHubWrapper>
+// 			<MusicTextWrapper>
+// 				<MusicHubEffectBg />
+// 				<MusicTitle>Hello, {user?.name || "Guest"}!</MusicTitle>
+
+// 				<MusicFormWrapper>
+// 					<StepCounter>
+// 						{currentQuestion + 1} of {questionsData.length}
+// 					</StepCounter>
+// 					<QuestionWrapper>
+// 						<QuestionText>{question}</QuestionText>
+// 						<AnswerInput
+// 							type="text"
+// 							value={answers[currentQuestion] || ""}
+// 							onChange={handleAnswerChange}
+// 							placeholder={
+// 								example ? example : "Type your answer here"
+// 							}
+// 							required
+// 						/>
+// 					</QuestionWrapper>
+// 					<ButtonWrapper>
+// 						<NextButton
+// 							onClick={handleNextQuestion}
+// 							disabled={
+// 								isGenerating ||
+// 								!answers[currentQuestion] ||
+// 								!isLoggedIn
+// 							}
+// 						>
+// 							{isGenerating
+// 								? "Generating..."
+// 								: currentQuestion === questionsData.length - 1
+// 								? "Generate Ringtone"
+// 								: "Next"}
+// 						</NextButton>
+// 						<ResetButton onClick={handleReset}>Reset</ResetButton>
+// 					</ButtonWrapper>
+// 					{generatedUrl && (
+// 						<RedirectButton onClick={handleDownload}>
+// 							Download Ringtone
+// 						</RedirectButton>
+// 					)}
+// 				</MusicFormWrapper>
+// 			</MusicTextWrapper>
+// 		</MusicHubWrapper>
+// 	);
+// }
+
+// export default Playlist;
+
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "@/hooks";
 import questionsData from "@/data/questions.json";
@@ -333,6 +498,7 @@ function Playlist() {
 	const { user, isLoggedIn } = useAuth();
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [answers, setAnswers] = useState([]);
+	const audioRef = useRef(null);
 
 	const isGenerating = useSelector(selectIsGenerating);
 	const generatedUrl = useSelector(selectGeneratedUrl);
@@ -376,30 +542,33 @@ function Playlist() {
 		);
 
 		const result = await dispatch(generateRingtone(ringtoneData));
-		console.log("Generation result:", result);
 
 		if (result.error) {
 			console.error("Generation failed:", result.error);
 			return;
 		}
 
-		toast.success(
-			"Your ringtone is ready to download!",
-			commonToastOptions
-		);
+		if (result.payload?.url) {
+			toast.success(
+				"Your ringtone is ready! Click play to preview.",
+				commonToastOptions
+			);
+		}
 	};
 
-	const handleDownload = async () => {
-		if (!generatedUrl) return;
-
+	const handleDownload = () => {
 		try {
-			// Create a hidden anchor element
+			// Create an anchor element
 			const link = document.createElement("a");
 			link.href = generatedUrl;
-			link.download = `ringtone-${Date.now()}.mp3`; // Default filename
+			link.download = `ringtone-${answers[0]}-${Date.now()}.mp3`;
+
+			// Required for Firefox
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
+
+			toast.success("Download started!", commonToastOptions);
 		} catch (error) {
 			console.error("Download error:", error);
 			toast.error("Failed to download ringtone", commonToastOptions);
@@ -409,6 +578,10 @@ function Playlist() {
 	const handleReset = () => {
 		setCurrentQuestion(0);
 		setAnswers([]);
+		if (audioRef.current) {
+			audioRef.current.pause();
+			audioRef.current.currentTime = 0;
+		}
 	};
 
 	const { question, example } = questionsData[currentQuestion];
@@ -453,9 +626,17 @@ function Playlist() {
 						<ResetButton onClick={handleReset}>Reset</ResetButton>
 					</ButtonWrapper>
 					{generatedUrl && (
-						<RedirectButton onClick={handleDownload}>
-							Download Ringtone
-						</RedirectButton>
+						<>
+							<audio
+								ref={audioRef}
+								src={generatedUrl}
+								controls
+								style={{ marginTop: "20px", width: "100%" }}
+							/>
+							<RedirectButton onClick={handleDownload}>
+								Download Ringtone
+							</RedirectButton>
+						</>
 					)}
 				</MusicFormWrapper>
 			</MusicTextWrapper>
