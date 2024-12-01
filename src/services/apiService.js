@@ -11,7 +11,7 @@ import axios from 'axios';
 
 // Create axios instance with correct port
 const api = axios.create({
-    baseURL: 'https://harmonyhub.onrender.com/api',
+    baseURL: 'https://harmonyhub-vzfi.onrender.com/api',
     headers: {
         'Content-Type': 'application/json'
     }
@@ -55,5 +55,5 @@ api.interceptors.response.use(
 );
 
 // export const URL = 'http://localhost:27017/api';
-export const URL = 'https://harmonyhub.onrender.com/api';
+export const URL = 'https://harmonyhub-vzfi.onrender.com/api';
 export default api;

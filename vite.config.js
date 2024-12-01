@@ -12,7 +12,7 @@ export default defineConfig({
             '/api': {
                 // target: 'http://localhost:3000',
                 // target: 'http://localhost:27017',
-                target: 'https://harmonyhub.onrender.com',
+                target: 'https://harmonyhub-vzfi.onrender.com',
                 changeOrigin: true,
                 secure: false
             }
