@@ -2,8 +2,8 @@
 
 <img align="right" src="https://media.giphy.com/media/du3J3cXyzhj75IOgvA/giphy.gif" width="100"/>
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/Alexandrbig1/trail_quest)](https://github.com/Alexandrbig1/trail_quest/commits/main)
-[![GitHub license](https://img.shields.io/github/license/Alexandrbig1/trail_quest)](https://github.com/Alexandrbig1/trail_quest/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Alexandrbig1/harmony-hub)](https://github.com/Alexandrbig1/harmony-hub/commits/main)
+[![GitHub license](https://img.shields.io/github/license/Alexandrbig1/harmony-hub)](https://github.com/Alexandrbig1/harmony-hub/blob/main/LICENSE)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/47784fa7-ada3-455a-8e28-7ef83746ee1a/deploy-status)](https://app.netlify.com/sites/harmony-hub-live/deploys)
 [![JavaScript](https://img.shields.io/badge/JavaScript-Latest-EAD319.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Axios](https://img.shields.io/badge/Axios-1.6.4-5300D8.svg)](https://github.com/axios/axios)
